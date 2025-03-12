@@ -1,0 +1,147 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="ソース ファイル">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="ヘッダー ファイル">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="リソース ファイル">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="ソース ファイル\Scene">
+      <UniqueIdentifier>{a300186d-3d5b-4a6f-8cc5-5868832e033f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\GameObjectMng">
+      <UniqueIdentifier>{7e9c8e8c-cf9a-48e4-9a66-6a20ed0c51c8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\circle">
+      <UniqueIdentifier>{a118de6e-926c-4b21-85ea-0d5e23063559}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Notes">
+      <UniqueIdentifier>{48194f4a-a4e3-4a5d-a8b0-fe2e44af54ab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\beats">
+      <UniqueIdentifier>{0c2ab324-4fc8-46f4-b2fd-653975fd0b18}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Source\App.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\main.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Scene\Scene.cpp">
+      <Filter>ソース ファイル\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Scene\SceneGameClear.cpp">
+      <Filter>ソース ファイル\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Scene\SceneGameOver.cpp">
+      <Filter>ソース ファイル\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Scene\SceneInGame.cpp">
+      <Filter>ソース ファイル\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Scene\SceneMng.cpp">
+      <Filter>ソース ファイル\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Scene\SceneTitle.cpp">
+      <Filter>ソース ファイル\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GameObjectMng\GameObjectMng.cpp">
+      <Filter>ソース ファイル\GameObjectMng</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\circle\circle.cpp">
+      <Filter>ソース ファイル\circle</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\circle\under_circle.cpp">
+      <Filter>ソース ファイル\circle</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\circle\upper_circle.cpp">
+      <Filter>ソース ファイル\circle</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Notes\Notes.cpp">
+      <Filter>ソース ファイル\Notes</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Notes\Under_Notes.cpp">
+      <Filter>ソース ファイル\Notes</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Notes\Upper_Notes.cpp">
+      <Filter>ソース ファイル\Notes</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Notes\NotesPool.cpp">
+      <Filter>ソース ファイル\Notes</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Notes\NotesMng.cpp">
+      <Filter>ソース ファイル\Notes</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\beats\Beats.cpp">
+      <Filter>ソース ファイル\beats</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Source\App.h">
+      <Filter>ソース ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\AppDef.h">
+      <Filter>ソース ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Scene\Scene.h">
+      <Filter>ソース ファイル\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Scene\SceneGameClear.h">
+      <Filter>ソース ファイル\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Scene\SceneGameOver.h">
+      <Filter>ソース ファイル\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Scene\SceneInGame.h">
+      <Filter>ソース ファイル\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Scene\SceneMng.h">
+      <Filter>ソース ファイル\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Scene\SceneTitle.h">
+      <Filter>ソース ファイル\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameDef.h">
+      <Filter>ソース ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GameObjectMng\GameObjectMng.h">
+      <Filter>ソース ファイル\GameObjectMng</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\circle\circle.h">
+      <Filter>ソース ファイル\circle</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\circle\under_circle.h">
+      <Filter>ソース ファイル\circle</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\circle\upper_circle.h">
+      <Filter>ソース ファイル\circle</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Notes\Notes.h">
+      <Filter>ソース ファイル\Notes</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Notes\Under_Notes.h">
+      <Filter>ソース ファイル\Notes</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Notes\Upper_Notes.h">
+      <Filter>ソース ファイル\Notes</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Notes\NotesPool.h">
+      <Filter>ソース ファイル\Notes</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Notes\NotesMng.h">
+      <Filter>ソース ファイル\Notes</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\beats\Beats.h">
+      <Filter>ソース ファイル\beats</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

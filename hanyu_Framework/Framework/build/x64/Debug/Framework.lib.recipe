@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project>
+  <ProjectOutputs />
+  <ContentFiles>
+    <ContentFile>
+      <FullPath>F:\個人制作\実習用フレームワーク_20241224\実習用フレームワーク_20241224\Assets\Shaders\SimpleTexPS.cso</FullPath>
+    </ContentFile>
+    <ContentFile>
+      <FullPath>F:\個人制作\実習用フレームワーク_20241224\実習用フレームワーク_20241224\Assets\Shaders\SimpleTexVS.cso</FullPath>
+    </ContentFile>
+  </ContentFiles>
+  <SatelliteDlls />
+  <NonRecipeFileRefs />
+</Project>
