@@ -5,6 +5,9 @@
 #include "GameObjectMng/GameObjectMng.h"
 
 #include "beats/Beats.h"
+
+Beats pBeats;
+
 //‰Šú‰»
 void SceneInGame::Init() {
 	mNextScene = SceneType::None;
@@ -28,7 +31,11 @@ void SceneInGame::Update() {
 	{
 		mNextScene = SceneType::GameClear;
 	}
-	
+	//ƒ|[ƒY‰æ–Ê‚Ö‘JˆÚ
+	if (Input_I->IsKeyDown('P')) {
+		pBeats.StopBeats();
+		mNextScene = SceneType::Pause;
+	}
 }
 
 //•`‰æ

@@ -7,6 +7,7 @@
 #include "SceneInGame.h"
 #include "SceneGameOver.h"
 #include "SceneGameClear.h"
+#include "Pause.h"
 
 //初期化
 void SceneMng::Init(SceneType startScene) {
@@ -76,6 +77,10 @@ void SceneMng::_beginScene(SceneType newScene) {
 	case SceneType::GameClear:
 		//ゲームクリアシーンの生成
 		mpScene = new SceneGameClear();
+		break;
+	case SceneType::Pause:
+		//ポーズ画面の生成
+		mpScene = new Pause();
 		break;
 	}
 

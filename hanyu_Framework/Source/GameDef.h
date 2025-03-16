@@ -22,4 +22,5 @@ enum class SceneType {
 	InGame,
 	GameOver,
 	GameClear,
+	Pause,
 };

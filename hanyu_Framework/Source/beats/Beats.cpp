@@ -82,3 +82,8 @@ bool Beats::IsPlaying() {
 float Beats::GetSongLength() {
 	return mSongLength;
 }
+
+//‹È‚ðŽ~‚ß‚é
+void Beats::StopBeats() {
+	mSoundSource.Stop();
+}

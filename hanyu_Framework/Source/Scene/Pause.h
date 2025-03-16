@@ -8,8 +8,14 @@
 //MP3ファイルを扱うクラスのinclude
 #include "Fwk/Audio/MP3Sound.h"
 
+//SpriteやTexture,Animationを使うためのヘッダファイル
+#include "Fwk/Graphics.h"
+
+//Vector2fクラスを使うためのヘッダファイル
+#include "Lib/Math/Vector.h"
+
 //タイトルシーンクラス
-class SceneInGame : public Scene
+class Pause : public Scene
 {
 public:
 	//初期化
@@ -21,17 +27,18 @@ public:
 	//描画
 	void Render();
 
-	//時間を返す
-	float GetTimer();
-
 private:
 	//BGM読み込み用
 	MP3Sound mSound;
 	//音源
 	SoundSource mSoundSource;
-	//タイマー
-	float mTimer;
 
-	//初期化判断
-	bool InitPause;
+	Texture yariTexture;
+	Texture conTexture;
+	Sprite yariSprite;
+	Sprite conSprite;
+	Vector2f mPosition;
+
+	float X;
+	bool i = false;
 };

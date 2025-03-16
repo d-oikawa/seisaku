@@ -20,6 +20,7 @@ public:
 	float GetSongLength();
 	bool IsPlaying();
 	void CreateMusic(CSVData* pCsvData);
+	void StopBeats();
 
 private:
 	string musicName;
