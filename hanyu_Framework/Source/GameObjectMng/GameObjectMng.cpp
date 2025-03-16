@@ -6,11 +6,7 @@
 //画面サイズの定数を使うのでinclude
 #include "AppDef.h"
 
-//音楽を再生させる
-#include "beats/Beats.h"
 
-//ノーツの情報を取得する
-#include "Notes/NotesMng.h"
 
 Under_Circle mUnderCircle;
 Upper_Circle mUpperCircle;
@@ -62,4 +58,11 @@ void GameObjectTerm()
 	mUnderCircle.Term();
 	mUpperCircle.Term();
 	mBeats.Term();
+}
+
+
+//Beatsクラスのポインタを返す
+Beats* GetBeats()
+{
+	return &mBeats;
 }

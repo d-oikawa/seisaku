@@ -3,14 +3,14 @@
 
 //初期化
 //音楽・タイマーの初期化
-//１拍あたりの秒数の計算 1分間/BPM(４拍子)=１拍当たりの秒/１小節あたりの拍数(８拍子なら/2.0f)
+//１拍あたりの秒数の計算 1分間/BPM(４拍子)=１拍当たりの長さ*１小節あたりの拍数/何拍子か(8拍子なら/2.0f or /(8.0f/4.0f))
 void Beats::Init() {
 		mSound.Load(musicFileName);
 		mSoundSource.Init(mSound);
 		mSoundSource.Play();
 		mTimer = 0.0f;
 		mBeatTimer = 0.0f;
-		mBeats = 60.0f / (float)mBPM / 4.0f;
+		mBeats = 60.0f / (float)mBPM * 4.0f / 4.0f;
 }
 
 //更新
@@ -55,6 +55,7 @@ void Beats::CreateMusic(CSVData* pCsvData) {
 		mSongLength = pCsvData->GetInt(index + 2);
 		mBPM = pCsvData->GetInt(index + 3);
 	}
+	
 }
 
 //現在が曲全体で何拍目かを返す
@@ -67,6 +68,17 @@ float Beats::GetTimer() {
 }
 
 //曲が再生されているか返す
+//mSonglemgthよりmTimerの値が大きくなったらtrueを返す
 bool Beats::IsPlaying() {
-	return mSoundSource.IsPlaying();
+	bool bEnd = false;
+	if (mSongLength<mTimer)
+	{
+		bEnd = true;
+	}
+	return bEnd;
+}
+
+//曲の長さを返す
+float Beats::GetSongLength() {
+	return mSongLength;
 }

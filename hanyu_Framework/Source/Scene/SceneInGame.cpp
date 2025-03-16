@@ -5,7 +5,6 @@
 #include "GameObjectMng/GameObjectMng.h"
 
 #include "beats/Beats.h"
-Beats pBeats;
 //初期化
 void SceneInGame::Init() {
 	mNextScene = SceneType::None;
@@ -16,6 +15,7 @@ void SceneInGame::Init() {
 void SceneInGame::Term() {
 	//ゲームオブジェクトの解放
 	GameObjectTerm();
+
 }
 
 //更新
@@ -24,7 +24,7 @@ void SceneInGame::Term() {
 void SceneInGame::Update() {
 //ゲームオブジェクトの更新
 	GameObjectUpdate();
-	if (pBeats.IsPlaying())
+	if (GetBeats()->IsPlaying())
 	{
 		mNextScene = SceneType::GameClear;
 	}

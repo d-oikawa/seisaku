@@ -17,6 +17,7 @@ public:
 	void Term();
 	int GetBeats();
 	float GetTimer();
+	float GetSongLength();
 	bool IsPlaying();
 	void CreateMusic(CSVData* pCsvData);
 
@@ -26,7 +27,7 @@ private:
 	float mSongLength;
 	float mTimer;
 	float mBeatTimer;
-	int mBeats;
+	float mBeats;
 	int mBPM;
 	int mBeatsCounts;
 	SoundSource mSoundSource;
