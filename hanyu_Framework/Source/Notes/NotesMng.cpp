@@ -7,8 +7,17 @@
 #include "Under_Notes.h"
 #include "Upper_Notes.h"
 
+//Beatクラスのポインタを使うためinclude
+#include "GameObjectMng/GameObjectMng.h"
+
 //初期化
 void NotesMng::Init() {
+	//譜面作成時に使う変数の初期化
+	mpBeatMapData = nullptr;
+	mBeatNum = 0;
+	mRowNum = 0;
+	mBeat = 0;
+
 	//アクティブなノーツのポインタ配列を空にしておく
 	mActiveNotes.clear();
 }
@@ -35,14 +44,37 @@ void NotesMng::Update() {
 	{
 		if (mActiveNotes[i]->IsActive())
 		{
-			//mActiveEnemies[i]がアクティブのままであれば
+			//mActiveNotes[i]がアクティブのままであれば
 			//次の要素を処理するのでiをインクリメント
 			++i;
 		}
 		else
 		{
-			//mActiveEnemies[i]が非アクティブとなっていたらその要素を取り除く
+			//mActiveNotes[i]が非アクティブとなっていたらその要素を取り除く
 			mActiveNotes.erase(mActiveNotes.begin() + i);
+		}
+	}
+	//現在のBeatと更新されているBeatの値が同じであればreturn
+	if (mBeat==GetBeats()->GetBeatsCounts())
+	{
+		return;
+	}
+
+	//現在のBeatを取得
+	mBeat = GetBeats()->GetBeatsCounts();
+
+	//現在のBeatが生成するビートの-4拍と同じ値であれば生成し、ループを抜ける
+	for (int i = 0; i < mRowNum; i++)
+	{
+		//拍数分繰り返し
+		//iが0なら上ノーツ、1なら下ノーツの生成
+		for (int n = 0; n < mBeatNum; n++)
+		{
+			if (mpBeatMapData[i][n + (mBeat-4)] == 1 && n == mBeat - 4)
+			{
+				CreateNotes(mNotesName[i]);
+				break;
+			}
 		}
 	}
 }
@@ -93,7 +125,7 @@ void NotesMng::DestroyPoolALL() {
 }
 
 //ノーツの生成
-void NotesMng::CreateNotes(string notesName, float timer) {
+void NotesMng::CreateNotes(string notesName) {
 	//指定のノーツプールから非アクティブのオブジェクトを取得する
 	Notes* pNotes = nullptr;
 
@@ -108,8 +140,8 @@ void NotesMng::CreateNotes(string notesName, float timer) {
 	{
 		return;
 	}
-	//時間を設定を設定
-	pNotes->SetTimer(timer);
+	//生成タイミングの時間を設定
+	pNotes->SetBeat(mBeat);
 
 	//生成時に関数を呼び出す
 	pNotes->OnCreated();
@@ -119,30 +151,35 @@ void NotesMng::CreateNotes(string notesName, float timer) {
 }
 
 //CSVデータからノーツを生成する
-void NotesMng::CreateNotes(CSVData* pCsvData) {
+void NotesMng::CreateNotes(int beatNum, int rowNum, CSVData* pCsvData) {
 	//nullptrが渡されてきたら何もしないで関数を抜ける
 	if (pCsvData == nullptr)
 	{
 		return;
 	}
+	//拍数・行数を記録
+	mBeatNum = beatNum;
+	mRowNum = rowNum;
 
-	//ノーツの情報は、名前、表示する秒数の2つで１組。
-	//CSVファイルの全要素を2で割ってノーツの配置情報の数とする
-	int notesNum = pCsvData->GetElementCount() / 2;
-	//配置するノーツの数だけ繰り返し
-	for (int i = 0; i < notesNum; i++)
+
+	//拍数×行数分の配列を確保する
+	mpBeatMapData = new int* [mRowNum];
+	for (int i = 0; i < mRowNum; i++)
 	{
-		//ノーツ１体の配置データの先頭の要素番号
-		int index = i * 2;
-		//ノーツの名前を取得
-		string notesName;
-		pCsvData->GetString(index, &notesName);
-		//配置先の座標を取得
-		float timer;
-		timer = pCsvData->GetFloat(index + 1);
+		mpBeatMapData[i] = new int[mBeatNum];
+	}
 
-		//ノーツを生成
-		CreateNotes(notesName, timer);
+	//行数分繰り返し
+	for (int i = 0; i < mRowNum; i++)
+	{
+		//拍数分繰り返し
+		for (int n = 0; n < mBeatNum; n++)
+		{
+			//n列i行目のタイルIDをCSVDataから取得
+			int id = pCsvData->GetInt(n + (i * mBeatNum));
+			//マップデータのn列i行目のタイルIDを上書き
+			mpBeatMapData[i][n] = id;
+		}
 	}
 }
 

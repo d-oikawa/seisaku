@@ -2,37 +2,64 @@
 #include "GameDef.h"
 #include "Fwk/Framework.h"
 #include "Scene/SceneInGame.h"
+#include "GameObjectMng/GameObjectMng.h"
+#include "AppDef.h"
 
 SceneInGame mInGame;
 
 //初期化
-//共通するサイズ・コリジョン・サウンド・アニメーションの設定
+//共通するサイズ・テクスチャ・コリジョン・サウンド・アニメーションの設定
 void Notes::Init() {
 	{
+		mSprite.SetTexture(mTexture);
 		mSprite.SetSize(64.0f, 64.0f);
+		mPosition.x = WINDOW_WIDTH + 64.0f;
+		mSprite.SetVisible(true);
+		mIsActive = true;
 	}
 	{
 		mCollision.SetGroup((int)CollisionGroup::decisioncircle);
 		mCollision.AddHitGroup((int)CollisionGroup::notes);
 		mCollision.SetOwner(this);
 		mCollision.SetActive(true);
-		CollisionManager_I->Register(&mCollision);
+		//CollisionManager_I->Register(&mCollision);
 	}
 	{
 		mSound.Load("Sound/jumpC.wav");
 		mSoundSource.Init(mSound);
 	}
 	_initAnimation();
+
+	mSprite.Init();
 }
 
 //更新
+//生成を受け取ったらノーツを常に移動させる
+//左端に移動したら見えなくする
 void Notes::Update() {
-	mPosition.x -= 105.0f * Time_I->GetDeltaTime();
+	if (!mIsActive)
+	{
+		return;
+	}
+	mSprite.SetVisible(true);
+	float speed = 600.0f * Time_I->GetDeltaTime();
+	mPosition.x -= speed;
+	if (mPosition.x < 0.0f)
+	{
+		mIsActive = false;
+		mSprite.SetVisible(false);
+	}
+
+	mSprite.SetPosition(mPosition);
 	mSprite.Update();
 }
 
 //描画
 void Notes::Render() {
+	if (!mIsActive)
+	{
+		return;
+	}
 	mSprite.Draw();
 }
 
@@ -41,7 +68,7 @@ void Notes::Render() {
 void Notes::Term() {
 	mTexture.Unload();
 	mSprite.Term();
-	CollisionManager_I->Unregister(&mCollision);
+	//CollisionManager_I->Unregister(&mCollision);
 	mSound.Unload();
 	mSoundSource.Term();
 }
@@ -74,16 +101,16 @@ void Notes::SetActive(bool isActive) {
 	mCollision.SetActive(isActive);
 }
 
-//タイマーを設定
-void Notes::SetTimer(float timer) {
-	mTimer = mInGame.GetTimer();
+//拍数を設定
+void Notes::SetBeat(int beat) {
+	mBeat = mInGame.GetBeat();
 }
 
-//タイマーを取得
-float Notes::GetTimer() {
-	return mTimer;
+//拍数を取得
+float Notes::GetBeat() {
+	return mBeat;
 }
 
+//生成されたときupdateを更新する
 void Notes::OnCreated() {
-	//なし
 }

@@ -5,7 +5,7 @@
 //------------------------
 #include "Fwk/Graphics.h"
 #include "Lib/Math/Vector.h"
-#include "Fwk/Collision/Collision.h"
+#include "Fwk/Collision/Collider.h"
 #include "Fwk/Audio/WaveSound.h"
 #include "Fwk/Audio/SoundSource.h"
 using namespace Lib::Math;
@@ -22,8 +22,8 @@ public:
 	Vector2f GetPosition();
 	bool IsActive();
 	void SetActive(bool IsActive);
-	float GetTimer();
-	void SetTimer(float timer);
+	float GetBeat();
+	void SetBeat(int beat);
 	virtual void OnCreated();
 
 
@@ -31,12 +31,13 @@ protected:
 	void _initAnimation();
 
 protected:
-	float mTimer;
+	float mBeat;
 	bool mIsActive;
+	bool mIsOnCreated;
 	Texture mTexture;
 	Sprite mSprite;
 	Vector2f mPosition;
-	Collision mCollision;
+	Collider mCollision;
 	WaveSound mSound;
 	SoundSource mSoundSource;
 

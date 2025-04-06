@@ -13,7 +13,7 @@ void Decisioncircle::Init() {
 		mCollision.AddHitGroup((int)CollisionGroup::notes);
 		mCollision.SetOwner(this);
 		mCollision.SetActive(true);
-		CollisionManager_I->Register(&mCollision);
+		//CollisionManager_I->Register(&mCollision);
 	}
 	{
 		mSound.Load("Sound/hit.wav");
@@ -37,7 +37,7 @@ void Decisioncircle::Render() {
 void Decisioncircle::Term() {
 	mTexture.Unload();
 	mSprite.Term();
-	CollisionManager_I->Unregister(&mCollision);
+	//CollisionManager_I->Unregister(&mCollision);
 	mSound.Unload();
 	mSoundSource.Term();
 }

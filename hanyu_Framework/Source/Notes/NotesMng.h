@@ -38,18 +38,31 @@ public:
 	void DestroyPoolALL();
 
 	//ノーツの生成
-	void CreateNotes(string notesName, float timer);
+	void CreateNotes(string notesName);
 
 	//残りのノーツの数
 	int GetNotesCount();
 
 	//CSVデータからノーツを生成する
-	void CreateNotes(CSVData* pCsvData);
+	void CreateNotes(int beatNum, int rowNum, CSVData* pCsvData);
 
 private:
 	//アクティブなノーツオブジェクトのポインタ配列
 	vector<Notes*> mActiveNotes;
 	//ノーツ種別ごとのオブジェクトプール
 	map<string, NotesPool>mNotesPools;
+	//現在のビートを取得
+	int mBeat;
+	//ノーツのタグの設定
+	string mNotesName[2] = { "Upper_Notes","Under_Notes" };
+
+private:
+
+	//拍数と行数を保存するための値
+	int mBeatNum;
+	int mRowNum;
+
+	//譜面のデータ(id)を収める配列のアドレスの作成
+	int** mpBeatMapData;
 };
 

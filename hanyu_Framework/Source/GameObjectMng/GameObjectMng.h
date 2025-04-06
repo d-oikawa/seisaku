@@ -1,7 +1,5 @@
 #pragma once
 
-#include "circle/under_circle.h"
-#include "circle/upper_circle.h"
 
 //‰¹Šy‚ğÄ¶‚³‚¹‚é
 #include "beats/Beats.h"

@@ -1,6 +1,6 @@
 #pragma once
 
-//敵プールクラス
+//ノーツプールクラス
 
 //可変表記配列std::vectorを使う
 #include <vector>
@@ -11,7 +11,7 @@ class NotesPool
 {
 public:
 	//初期化
-	//class Tは、Init関数の呼び出し時に具体的な敵クラスに置き換わる。
+	//class Tは、Init関数の呼び出し時に具体的なノーツクラスに置き換わる。
 	template<class T>
 	void Init(int poolSize) {
 		//プール全要素分の敵オブジェクトを生成

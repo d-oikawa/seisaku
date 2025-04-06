@@ -5,7 +5,7 @@
 
 //後片付け
 void NotesPool::Term() {
-	//Notes*配列の各要素にnewされた敵のオブジェクトのアドレスが
+	//Notes*配列の各要素にnewされたノーツのオブジェクトのアドレスが
 	//記録されているので、1つ１つDELETEしていく
 	for (int i = 0; i < mPool.size(); i++)
 	{

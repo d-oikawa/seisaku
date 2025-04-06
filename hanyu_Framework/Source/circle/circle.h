@@ -5,7 +5,7 @@
 //------------------------
 #include "Fwk/Graphics.h"
 #include "Lib/Math/Vector.h"
-#include "Fwk/Collision/Collision.h"
+#include "Fwk/Collision/Collider.h"
 #include "Fwk/Audio/WaveSound.h"
 #include "Fwk/Audio/SoundSource.h"
 
@@ -29,7 +29,7 @@ protected:
 	Texture mTexture;
 	Sprite mSprite;
 	Vector2f mPosition;
-	Collision mCollision;
+	Collider mCollision;
 	WaveSound mSound;
 	SoundSource mSoundSource;
 
