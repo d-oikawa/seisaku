@@ -42,7 +42,7 @@ void Notes::Update() {
 		return;
 	}
 	mSprite.SetVisible(true);
-	float speed = 600.0f * Time_I->GetDeltaTime();
+	float speed = 838.0f * Time_I->GetDeltaTime();
 	mPosition.x -= speed;
 	if (mPosition.x < 0.0f)
 	{
@@ -111,6 +111,7 @@ float Notes::GetBeat() {
 	return mBeat;
 }
 
-//¶¬‚³‚ê‚½‚Æ‚«update‚ðXV‚·‚é
+//¶¬‚³‚ê‚½‚Æ‚«À•W‚ð‰Šú‰»‚·‚é
 void Notes::OnCreated() {
+	mPosition.x = WINDOW_WIDTH + 64.0f;
 }

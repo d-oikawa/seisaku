@@ -63,14 +63,14 @@ void NotesMng::Update() {
 	//現在のBeatを取得
 	mBeat = GetBeats()->GetBeatsCounts();
 
-	//現在のBeatが生成するビートの-4拍と同じ値であれば生成し、ループを抜ける
+	//現在のBeatが生成するビートの＋５拍と同じ値であれば生成し、ループを抜ける
 	for (int i = 0; i < mRowNum; i++)
 	{
 		//拍数分繰り返し
 		//iが0なら上ノーツ、1なら下ノーツの生成
 		for (int n = 0; n < mBeatNum; n++)
 		{
-			if (mpBeatMapData[i][n + (mBeat-4)] == 1 && n == mBeat - 4)
+			if (mpBeatMapData[i][n + (mBeat)] == 1 && n == mBeat)
 			{
 				CreateNotes(mNotesName[i]);
 				break;
