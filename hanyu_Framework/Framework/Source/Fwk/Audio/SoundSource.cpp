@@ -65,6 +65,7 @@ void SoundSource::Play(int PlayNum) {
 	mp_sources[m_useSource].Play(PlayNum);
 	m_useSource = (m_useSource + 1) % m_sourseNum;
 }
+
 void SoundSource::Stop() {
 
 	if (m_sourseNum < 1) {
@@ -74,8 +75,10 @@ void SoundSource::Stop() {
 	for (int i = 0; i < m_sourseNum; ++i) {
 		mp_sources[i].Stop();
 	}
+
 	m_useSource = 0;
 }
+
 bool SoundSource::IsPlaying()const {
 	if (m_sourseNum < 1) {
 		return false;
@@ -83,6 +86,32 @@ bool SoundSource::IsPlaying()const {
 
 	for (int i = 0; i < m_sourseNum; ++i) {
 		if (mp_sources[i].IsPlaying()) {
+			return true;
+		}
+	}
+
+	return false;
+}
+
+void SoundSource::Pause() {
+
+	if (m_sourseNum < 1) {
+		return;
+	}
+
+	for (int i = 0; i < m_sourseNum; ++i) {
+		mp_sources[i].Pause();
+	}
+
+}
+
+bool SoundSource::IsPausing() const {
+	if (m_sourseNum < 1) {
+		return false;
+	}
+
+	for (int i = 0; i < m_sourseNum; ++i) {
+		if (mp_sources[i].IsPausing()) {
 			return true;
 		}
 	}

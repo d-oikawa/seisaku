@@ -23,6 +23,9 @@ public:
 	void Stop();
 	bool IsPlaying()const;
 
+	void Pause();
+	bool IsPausing()const;
+
 private:
 
 	Lib::Audio::SourceVoice* mp_sources;

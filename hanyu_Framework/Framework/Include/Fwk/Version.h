@@ -1,6 +1,14 @@
 ﻿#pragma once
 
-#define FWK_VERSION 20241224
+#define FWK_VERSION 20250317
+//・衝突形状クラスの名称を変更　Collision → Collider
+//・サウンドに一時停止機能を付けた
+
+//#define FWK_VERSION 20250204
+//・テキスト描画系の関数を整理
+//・カラー定数を使えるようにクラス化
+
+//#define FWK_VERSION 20241224
 //・コリジョンのバグを修正
 //  矩形コリジョンの高さに幅を代入していた為、正しい衝突範囲が設定されていなかった。ごめん。
 //・テクスチャのアドレッシングモードをCLAMPからWRAPに変更

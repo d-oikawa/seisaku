@@ -13,7 +13,8 @@ SourceVoice::SourceVoice()
 	, m_bufferIndex(0)
 	, m_audioReadBytes(0)
 	, mp_waveData(nullptr)
-	, m_isPlaying(0)
+	, m_isPlaying(false)
+	, m_isPausing(false)
 	, m_PlayNum(0)
 	, m_PlayCount(0)
 {
@@ -44,6 +45,7 @@ bool SourceVoice::Init(IXAudio2* pXAudio,const WaveData* pWaveData) {
 	mp_waveData = pWaveData;
 	m_audioReadBytes = 0;
 	m_isPlaying = false;
+	m_isPausing = false;
 	m_PlayNum = 0;
 	m_PlayCount = 0;
 
@@ -65,8 +67,10 @@ void SourceVoice::Term() {
 	mp_waveData = nullptr;
 	m_audioReadBytes = 0;
 	m_isPlaying = false;
+	m_isPausing = false;
 	m_PlayNum = 0;
 	m_PlayCount = 0;
+
 	for (int i = 0; i < 2; ++i) {
 		m_audioBufferSize[i] = 0;
 		SAFE_DELETE_ARRAY(mp_audioBuffer[i])
@@ -86,14 +90,17 @@ void SourceVoice::Play(int PlayNum) {
 	{
 		std::lock_guard<std::mutex> lock(m_mutex);
 
-		m_audioReadBytes = 0;
-		m_PlayNum = PlayNum;
-		m_PlayCount = 0;
+		if (!IsPausing()) {
+			m_audioReadBytes = 0;
+			m_PlayNum = PlayNum;
+			m_PlayCount = 0;
+		}
 
 		if (IsPlaying()) {
 			return;
 		}
 
+		m_isPausing = false;
 		m_isPlaying = true;
 		mp_SourceVoice->Start();
 	}
@@ -108,11 +115,30 @@ void SourceVoice::Stop() {
 	{
 		std::lock_guard<std::mutex> lock(m_mutex);
 
-		if (!IsPlaying()) {
+		if (!IsPlaying() && !IsPausing()) {
 			return;
 		}
 		
 		_stop();
+	}
+}
+
+void SourceVoice::Pause() {
+
+	if (mp_SourceVoice == nullptr) {
+		return;
+	}
+
+	{
+		std::lock_guard<std::mutex> lock(m_mutex);
+
+		if (!IsPlaying()) {
+			return;
+		}
+
+		mp_SourceVoice->Stop();
+		m_isPlaying = false;
+		m_isPausing = true;
 	}
 }
 
@@ -124,6 +150,10 @@ bool SourceVoice::IsPlaying()const {
 	//mp_SourceVoice->GetState(&state);
 	//Debug::Logf("BuffersQueued %d\n", state.BuffersQueued);
 	return m_isPlaying;
+}
+
+bool SourceVoice::IsPausing()const {
+	return m_isPausing;
 }
 
 void SourceVoice::OnVoiceProcessingPassStart(UINT32 BytesRequired) {
@@ -244,6 +274,7 @@ void SourceVoice::_stop() {
 	mp_SourceVoice->Stop();
 	mp_SourceVoice->FlushSourceBuffers();
 	m_isPlaying = false;
+	m_isPausing = false;
 }
 
 }//namespace Audio

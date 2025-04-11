@@ -14,6 +14,14 @@
 //Vector2fクラスを使うためのヘッダファイル
 #include "Lib/Math/Vector.h"
 
+#include <string>
+using namespace std;
+
+//ポーズの中
+struct PauseData {
+	string Name;
+};
+
 //タイトルシーンクラス
 class Pause : public Scene
 {
@@ -41,4 +49,7 @@ private:
 
 	float X;
 	bool i = false;
+
+	//現在選択中のポーズ番号
+	int mSelectedIndex;
 };

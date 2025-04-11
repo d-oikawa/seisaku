@@ -6,6 +6,9 @@
 
 namespace Fwk
 {
+
+class SpriteFont;
+
 class FPSMeasure
 {
     FPSMeasure(const FPSMeasure&) = delete;
@@ -16,7 +19,8 @@ public:
     FPSMeasure();
     ~FPSMeasure();
 
-    void Init(uint32_t targetFPS,DWORD currentTime);
+    void Init(uint32_t targetFPS,DWORD currentTime,Fwk::SpriteFont* pSpriteFont);
+    void Term();
     void Update(DWORD currentTime);
     void Draw();
     int CalcWaitTime()const;

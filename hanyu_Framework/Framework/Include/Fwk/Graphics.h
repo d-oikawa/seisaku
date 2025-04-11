@@ -4,4 +4,5 @@
 #include "./Graphics/Texture.h"
 #include "./Graphics/RenderDef.h"
 #include "./Graphics/Sprite.h"
+#include "./Graphics/Color.h"
 #include "./Animation/Animation.h"

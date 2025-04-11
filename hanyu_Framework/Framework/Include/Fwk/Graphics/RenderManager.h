@@ -10,14 +10,19 @@
 
 #include "Fwk/Shape/Shape.h"
 #include "Fwk/Graphics/Camera.h"
+#include "Fwk/Graphics/Color.h"
+#include "Fwk/Graphics/Font.h"
 #include "SpriteFont.h"
 #include "RenderDef.h"
+
+#if defined(DEBUG) || defined(_DEBUG)
+#include "Fwk/Debug/DebugLog.h"
+#endif
 
 #include <cstdint>
 #include <vector>
 #include <map>
 
-class Font;
 using namespace Lib::Graphics;
 
 namespace Fwk {
@@ -59,6 +64,7 @@ private:
 		const wchar_t* pPixShaderPath
 	);
 
+	void Update(float deltaTime);
 	void Term();
 	void Render();
 
@@ -81,10 +87,9 @@ public:
 		pShape->Init(m_Graphics.GetDevice());
 	}
 
-	void SetupFont(Font* pFont);
-
 	void SetClearColor(float r, float g, float b);
 	void SetClearColor(const float rgb[]);
+	void SetClearColor(const DirectX::XMVECTORF32& _color);
 
 	void AddLayer(const std::string& name);
 	void RemoveLayer(const std::string& name);
@@ -93,22 +98,47 @@ public:
 
 	void SetCamera(const Camera& camera);
 	void RemoveCamera(const std::string& name);
-	Camera GetCamera();
-	Camera GetCamera(const std::string& name);
+	Camera* GetCamera();
+	Camera* GetCamera(const std::string& name);
 
 	//メインカメラの操作
 	void SetCameraOrder(int order);
-	void SetCameraActive (bool isActive);
-	void SetCameraPosition (const Vector2f& position);
+	void SetCameraActive(bool isActive);
+	void SetCameraPosition(const Vector2f& position);
 
 	//カメラ名を指定して操作
 	void SetCameraOrder(const std::string& name,int order);
-	void SetCameraActive (const std::string& name, bool isActive);
-	void SetCameraPosition (const std::string& name, const Vector2f& position);
+	void SetCameraActive(const std::string& name, bool isActive);
+	void SetCameraPosition(const std::string& name, const Vector2f& position);
 
 	//カメラの描画対象レイヤーの操作
 	void AddCameraRenderLayer(const std::string& cameraName,const std::string& targetLayerName);
 	void RemoveCameraRenderLayer(const std::string& cameraName,const std::string& targetLayerName);
+
+public:
+
+	void PrintText(const wchar_t* pText);
+	void PrintText(const wchar_t* pText, float pos_x, float pos_y);
+
+	void PrintText(const char* pText);
+	void PrintText(const char* pText, float pos_x, float pos_y);
+
+	void PrintText(const string& pText);
+	void PrintText(const string& pText, float pos_x, float pos_y);
+
+	void SetTextColor(float r, float g, float b);
+	void SetTextColor(const float rgb[]);
+	void SetTextColor(const DirectX::XMVECTORF32& _color);
+
+	void SetTextSize(float size);
+
+	void DebugLogImpl(const char* format, ...);
+	void DebugLogImpl(const string& format, ...);
+
+private:
+
+	void _PrintTextImpl(const wchar_t* pText, float pos_x, float pos_y, const float rgb[], float scale);
+	void _PrintTextImpl(const char* pText, float pos_x, float pos_y, const float rgb[], float scale);
 
 private:
 
@@ -174,6 +204,19 @@ private:
 	ResShader m_PixShader;
 
 	std::vector<Camera*> m_Cameras;
+
+	enum {
+		TEXT_BUFFER_MAX = 128
+	};
+	Font m_Text[TEXT_BUFFER_MAX];
+	int m_UseTextNum;
+
+	float m_TextColor[3];
+	float m_TextScale;
+
+#if defined(DEBUG) || defined(_DEBUG)
+	Fwk::DebugLog mDebugLog;
+#endif
 };
 
 }

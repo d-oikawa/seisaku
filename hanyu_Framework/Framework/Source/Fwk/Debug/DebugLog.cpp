@@ -1,6 +1,8 @@
 ﻿#if defined(DEBUG) || defined(_DEBUG)
 
 #include "Fwk/Debug/DebugLog.h"
+#include "Fwk/Graphics/SpriteFont.h"
+
 #include "Lib/Util/Log.h"
 
 namespace Fwk
@@ -19,10 +21,10 @@ DebugLog::~DebugLog() {
 
 }
 
-void DebugLog::Init() {
+void DebugLog::Init(Fwk::SpriteFont* pSpriteFont) {
 
 	for (int i = 0; i < DEBUG_LOG_MAX; ++i) {
-		mDebugLog[i].font.Init();
+		mDebugLog[i].font.Init(pSpriteFont);
 		mDebugLog[i].font.SetScale(0.5f, 0.5f);
 		mDebugLog[i].timeLeft = 0.0f;
 		mDebugLog[i].font.SetColor(0.0f,1.0f,1.0f);

@@ -6,6 +6,8 @@
 
 #include "Fwk/Framework.h"
 
+#include "Mst/PauseMst.h"
+
 #include <iostream>
 #include <iomanip>
 
@@ -16,31 +18,11 @@ Beats pBeats2;
 void Pause::Init() {
 	//次のシーンの初期値をなしにしておく
 	mNextScene = SceneType::None;
-	//テクスチャの読み込み
-	conTexture.Load("Images/2dAction/con.png");
-	yariTexture.Load("Images/2dAction/yari.png");
-
-	//スプライトの初期化
-	conSprite.Init();
-	yariSprite.Init();
-	//テクスチャの設定
-	conSprite.SetTexture(conTexture);
-	yariSprite.SetTexture(yariTexture);
-	//スプライトのサイズ設定
-	conSprite.SetSize(240.0f, 200.0f);
-	yariSprite.SetSize(240.0f, 200.0f);
-	//YajirushiSprite.SetPivot(Pivot::TopLeft);
-	conSprite.SetPosition(480.0f, -250.0f);
-	yariSprite.SetPosition(480.0f, -450.0f);
 }
 
 //終了
 void Pause::Term() {
 	//なし
-	conSprite.Term();
-	yariSprite.Term();
-	conTexture.Unload();
-	yariTexture.Unload();
 }
 
 //更新
@@ -48,28 +30,62 @@ void Pause::Update() {
 	mSoundSource.Stop();
 	//PrintText("コンティニュー", 420.0f, 50.0f);
 	//PrintText("最初からやり直す", 400.0f, 250.0f);
-		if (i == false) {
-			conSprite.SetAdditionalColor(10.0f, 0.0f, 0.0f);
-			yariSprite.SetAdditionalColor(0.0f, 0.0f, 0.0f);
-			i = true;
+
+
+	//下ボタンを押したら
+	if (Input_I->IsKeyDown(VK_DOWN)) {
+		//次を選択する
+		mSelectedIndex += 1;
+		//インデックスがオーバーしたら0に戻す
+		if (mSelectedIndex >= 3) {
+			mSelectedIndex = 0;
 		}
-		if (Input_I->IsKeyDown('2')) {
-			yariSprite.SetAdditionalColor(1.0f, 0.0f, 0.0f);
-			conSprite.SetAdditionalColor(0.0f, 0.0f, 0.0f);
+	}
+
+	//上ボタンを押したら
+	if (Input_I->IsKeyDown(VK_UP)) {
+		//ひとつ前を選択する
+		mSelectedIndex -= 1;
+		//インデックスが0未満になったら一番下を選択する
+		if (mSelectedIndex < 0) {
+			mSelectedIndex = 3 - 1;
 		}
-		if (Input_I->IsKeyDown('8')) {
-			conSprite.SetAdditionalColor(1.0f, 7.0f, 0.0f);
-			yariSprite.SetAdditionalColor(0.0f, 0.0f, 0.0f);
+	}
+
+	//Zボタンを押したら
+	if (Input_I->IsKeyDown('Z')) {
+		if (mSelectedIndex == 0) {
+
 		}
-		else  {
-			if (Input_I->IsKeyDown('5')) {
-				mNextScene = SceneType::Title;
-			}
+		else if (mSelectedIndex == 1) {
+			mNextScene = SceneType::InGame;
 		}
+		else if (mSelectedIndex == 2) {
+			mNextScene = SceneType::Title;
+		}
+	}
 }
 
 //描画
 void Pause::Render() {
-	conSprite.Draw();
-	yariSprite.Draw();
+	PrintText("[ポーズ画面]", 400.0f, 50.0f);
+
+
+	//選択中の文字色
+	float color_selected[3] = { 1.0,1.0f,0.0f };
+	//通常の文字色
+	float color_normal[3] = { 0.85f,0.0f,0.85f };
+
+	//文字列を描画する
+	for (int i = 0; i < 3; ++i) {
+
+		PauseData* pData = GetPauseDataMst().Get(i);
+
+		//文字色選択
+		float* pColor = (mSelectedIndex == i) ? color_selected : color_normal;
+
+		//選択名の描画  ※カラー設定の引数を追加するとエラーが起きる。羽生先生に相談するしかない
+		PrintText("ありがとね", 400.0f, 120.0f + i * 40.0f);
+
+	}
 }

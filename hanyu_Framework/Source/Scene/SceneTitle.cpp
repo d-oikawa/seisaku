@@ -25,5 +25,5 @@ void SceneTitle::Update() {
 //•`‰æ
 void SceneTitle::Render() {
 	//•¶š—ñ‚ğ•`‰æ‚·‚é
-	PrintText("aaaaa", 380.0f, 250.0f);
+	PrintText("ƒŠƒYƒ€ƒQ[ƒ€", 380.0f, 240.0f);
 }

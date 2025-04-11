@@ -21,16 +21,16 @@ public:
 	//描画
 	void Render();
 
-	//時間を返す
-	float GetTimer();
+	//拍数を返す
+	float GetBeat();
 
 private:
 	//BGM読み込み用
 	MP3Sound mSound;
 	//音源
 	SoundSource mSoundSource;
-	//タイマー
-	float mTimer;
+	//拍数
+	float mBeat;
 
 	//初期化判断
 	bool InitPause;

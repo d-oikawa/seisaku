@@ -9,7 +9,6 @@
 
 #include "Fwk/Graphics/RenderObject.h"
 #include "Fwk/Graphics/IDrawable.h"
-#include "Fwk/Graphics/Font.h"
 #include "Fwk/Graphics/Camera.h"
 
 using namespace DirectX;
@@ -47,8 +46,13 @@ RenderManager::RenderManager()
 	, m_Layers()
 	, m_RequestBufferSize(0)
 	, m_Cameras()
+	, m_UseTextNum(0)
+	, m_TextColor()
+	, m_TextScale(1.0f)
 {
-	;
+	m_TextColor[0] = 1.0f;
+	m_TextColor[1] = 1.0f;
+	m_TextColor[2] = 1.0f;
 }
 RenderManager::~RenderManager()
 {
@@ -365,6 +369,16 @@ void RenderManager::Init(
 		bSucceed = false;
 	}
 
+	//フォント
+	{
+		for (int i = 0; i < TEXT_BUFFER_MAX; ++i) {
+			m_Text[i].Init(&m_SpriteFont);
+		}
+	}
+
+#if defined(DEBUG) || defined(_DEBUG)
+	mDebugLog.Init(&m_SpriteFont);
+#endif
 
 	Debug::Logf("<<<<<<<< RenderManagerの初期化終了");
 	if(bSucceed){
@@ -377,6 +391,14 @@ void RenderManager::Init(
 
 	//初期化済フラグ設定
 	m_IsInitilized = bSucceed;
+}
+
+void RenderManager::Update(float deltaTime) {
+	m_UseTextNum = 0;
+
+#if defined(DEBUG) || defined(_DEBUG)
+	mDebugLog.Update(deltaTime);
+#endif
 }
 
 void RenderManager::Term()
@@ -402,7 +424,15 @@ void RenderManager::Term()
 		SAFE_DELETE(m_Cameras[i]);
 	}
 	m_Cameras.clear();
+	
+#if defined(DEBUG) || defined(_DEBUG)
+	mDebugLog.Term();
+#endif
 
+	for (int i = 0; i < TEXT_BUFFER_MAX; ++i) {
+		m_Text[i].Term();
+	}
+	
 	m_Graphics.Term();
 
 	m_IsInitilized = false;
@@ -431,6 +461,16 @@ void RenderManager::Render(){
 		Debug::Log("エラー：未初期化のRenderManagerに対して描画命令を要求しました。\n");
 		return;
 	}
+
+	//テキストフォント
+	for (int i = 0; i < m_UseTextNum; ++i) {
+		RequestRender(&m_Text[i]);
+	}
+
+	//デバッグログ
+#if defined(DEBUG) || defined(_DEBUG)
+	mDebugLog.Draw();
+#endif
 
 	m_Graphics.BeginRender();
 
@@ -583,21 +623,16 @@ IGraphics* RenderManager::GetGraphics() {
 	return &m_Graphics;
 }
 
-void RenderManager::SetupFont(Font* pFont)
-{
-	if (pFont == nullptr)
-		return;
-
-	pFont->SetSpriteFont(&m_SpriteFont);
-}
-
-void RenderManager::SetClearColor(float r, float g, float b)
-{
+void RenderManager::SetClearColor(float r, float g, float b){
 	m_Graphics.SetClearColor(r, g, b);
 }
 
 void RenderManager::SetClearColor(const float rgb[]) {
 	m_Graphics.SetClearColor(rgb[0], rgb[1], rgb[2]);
+}
+
+void RenderManager::SetClearColor(const DirectX::XMVECTORF32& _color) {
+	m_Graphics.SetClearColor(_color.f[0], _color.f[1], _color.f[2]);
 }
 
 void RenderManager::AddLayer(const std::string& name) {
@@ -699,18 +734,12 @@ void RenderManager::SetCamera(const Camera& camera) {
 	*m_Cameras[index] = camera;
 }
 
-Camera RenderManager::GetCamera() {
-	Camera* pCam = _findCamera("main");
-	return *pCam;
+Camera* RenderManager::GetCamera() {
+	return GetCamera("main");
 }
 
-Camera RenderManager::GetCamera(const std::string& name) {
-	Camera* pCam = _findCamera(name);
-	if (pCam == nullptr) {
-		Camera cam;
-		return cam;
-	}
-	return *pCam;
+Camera* RenderManager::GetCamera(const std::string& name) {
+	return _findCamera(name);
 }
 
 //メインカメラの操作
@@ -896,6 +925,77 @@ int RenderManager::_getLayerIndex(const string& name) {
 		}
 	}
 	return -1;
+}
+
+
+
+void RenderManager::PrintText(const char* pText)
+{
+	_PrintTextImpl(pText, 0.0f, 0.0f, m_TextColor, m_TextScale);
+}
+
+void RenderManager::PrintText(const char* pText, float pos_x, float pos_y)
+{
+	_PrintTextImpl(pText, pos_x, pos_y, m_TextColor, m_TextScale);
+}
+
+void RenderManager::_PrintTextImpl(const char* pText, float pos_x, float pos_y, const float rgb[], float scale)
+{
+	if (m_UseTextNum >= TEXT_BUFFER_MAX)
+		return;
+
+	m_Text[m_UseTextNum].SetText(pText);
+	m_Text[m_UseTextNum].SetPosition(pos_x, pos_y);
+	m_Text[m_UseTextNum].SetColor(rgb[0], rgb[1], rgb[2]);
+	m_Text[m_UseTextNum].SetScale(scale, scale);
+
+	++m_UseTextNum;
+}
+
+void RenderManager::PrintText(const string& pText) {
+	PrintText(pText.c_str(), 0.0f, 0.0f);
+}
+void RenderManager::PrintText(const string& pText, float pos_x, float pos_y) {
+	PrintText(pText.c_str(), pos_x, pos_y);
+}
+
+void RenderManager::SetTextColor(float r, float g, float b) {
+	m_TextColor[0] = r;
+	m_TextColor[1] = g;
+	m_TextColor[2] = b;
+}
+
+void RenderManager::SetTextColor(const float rgb[]) {
+	m_TextColor[0] = rgb[0];
+	m_TextColor[1] = rgb[1];
+	m_TextColor[2] = rgb[2];
+}
+
+void RenderManager::SetTextColor(const DirectX::XMVECTORF32& _color) {
+	m_TextColor[0] = _color.f[0];
+	m_TextColor[1] = _color.f[1];
+	m_TextColor[2] = _color.f[2];
+}
+
+void RenderManager::SetTextSize(float scale) {
+	//オリジナルのサイズが24.0なので
+	m_TextScale = scale / 24.0f;
+}
+
+void RenderManager::DebugLogImpl(const char* format, ...)
+{
+#if defined(DEBUG) || defined(_DEBUG)
+	va_list args;
+	va_start(args, format);
+	mDebugLog.Print(format, args);
+	va_end(args);   // (9)
+#endif
+}
+
+void RenderManager::DebugLogImpl(const string& format, ...) {
+#if defined(DEBUG) || defined(_DEBUG)
+	mDebugLog.Print(format.c_str());
+#endif
 }
 
 }

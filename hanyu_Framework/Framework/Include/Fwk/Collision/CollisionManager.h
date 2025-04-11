@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 #include <map>
-#include "Collision.h"
+#include "Collider.h"
 #include "CollisionTypes.h"
 
 using namespace Lib::Math;
@@ -13,7 +13,7 @@ namespace Collision {
 class CollisionManager
 {
 	struct Element {
-		Collision* pCollision;
+		Collider* pCollider;
 		bool bPendingRemove;
 		Element* pPrev;
 		Element* pNext;
@@ -38,14 +38,14 @@ public:
 
 	void Term();
 
-	void Register(Collision* pCollison);
-	void Unregister(Collision* pCollison);
+	void Register(Collider* pCollider);
+	void Unregister(Collider* pCollider);
 
 	void ProcCollisions();
 
 private:
 
-	Element* _findElement(Collision* pCollision);
+	Element* _findElement(Collider* pCollider);
 
 	void _procPendingRemoveElements();
 

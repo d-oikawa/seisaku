@@ -87,7 +87,7 @@ void CollisionManager::Init(int BufferSize)
 	Element* p = &mFreeTop;
 
 	for (int i = 0; i < BufferSize; ++i) {
-		mpBuffer[i].pCollision = nullptr;
+		mpBuffer[i].pCollider = nullptr;
 		mpBuffer[i].pNext = nullptr;
 		mpBuffer[i].pPrev = nullptr;
 		mpBuffer[i].bPendingRemove = false;
@@ -109,8 +109,8 @@ void CollisionManager::Term()
 	}
 
 	for (int i = 0; i < mBufferSize; ++i) {
-		if (mpBuffer[i].pCollision) {
-			mpBuffer[i].pCollision->mOnDestroyed = nullptr;
+		if (mpBuffer[i].pCollider) {
+			mpBuffer[i].pCollider->mOnDestroyed = nullptr;
 		} 
 	}
 	SAFE_DELETE_ARRAY(mpBuffer);
@@ -118,14 +118,14 @@ void CollisionManager::Term()
 	mBufferSize = 0;
 }
 
-void CollisionManager::Register(Collision* pCollision)
+void CollisionManager::Register(Collider* Collider)
 {
-	if (pCollision == nullptr) {
+	if (Collider == nullptr) {
 		return;
 	}
 
 	//既に登録されてたらまずいので重複チェック
-	if (_findElement(pCollision) != nullptr) {
+	if (_findElement(Collider) != nullptr) {
 		return;
 	}
 	//フリーの要素をひとつ取り出す
@@ -138,26 +138,26 @@ void CollisionManager::Register(Collision* pCollision)
 	//使用中リストの一番最後に挿入
 	mUsingTail.InsertPrev(p);
 	//コリジョンを登録しておく
-	p->pCollision = pCollision;
+	p->pCollider = Collider;
 
-	p->pCollision->mOnDestroyed = std::bind(&CollisionManager::Unregister, this, std::placeholders::_1);
+	p->pCollider->mOnDestroyed = std::bind(&CollisionManager::Unregister, this, std::placeholders::_1);
 
 	mOverlappedCollisions[p] = new std::map<Element*,OverlapInfo>();
 }
 
-void CollisionManager::Unregister(Collision* pCollision)
+void CollisionManager::Unregister(Collider* pCollider)
 {
-	if (pCollision == nullptr) {
+	if (pCollider == nullptr) {
 		return;
 	}
 
 	//登録されていなければ何もしない
-	Element* p = _findElement(pCollision);
+	Element* p = _findElement(pCollider);
 	if (p==nullptr) {
 		return;
 	}
 
-	p->pCollision->mOnDestroyed = nullptr;
+	p->pCollider->mOnDestroyed = nullptr;
 
 	//破棄待ち状態にしておく。
 	p->bPendingRemove = true;
@@ -173,41 +173,41 @@ void CollisionManager::ProcCollisions() {
 				return;
 			}
 
-			if (_p0->pCollision->mOnOverlapped != nullptr) {
-				_p0->pCollision->mOnOverlapped(*_p0->pCollision, *_p1->pCollision);
+			if (_p0->pCollider->mOnOverlapped != nullptr) {
+				_p0->pCollider->mOnOverlapped(*_p0->pCollider, *_p1->pCollider);
 			}
 
-			_p0->pCollision->mIsCollide = true;
+			_p0->pCollider->mIsCollide = true;
 
 			if (mOverlappedCollisions[_p0]->count(_p1) == 0
 			||  (*mOverlappedCollisions[_p0])[_p1].eventType == CollisionEventType::Exit ) {
 
 				(*mOverlappedCollisions[_p0])[_p1].eventType = CollisionEventType::Enter;
 
-				if (_p0->pCollision->mOnOverlappedEx != nullptr) {
+				if (_p0->pCollider->mOnOverlappedEx != nullptr) {
 
 					CollisionEvent e = {
-						_p0->pCollision,
-						_p1->pCollision,
+						_p0->pCollider,
+						_p1->pCollider,
 						CollisionEventType::Enter
 					};
 
-					_p0->pCollision->mOnOverlappedEx(e);
+					_p0->pCollider->mOnOverlappedEx(e);
 				}
 			}
 			else 
 			{
 				(*mOverlappedCollisions[_p0])[_p1].eventType = CollisionEventType::Stay;
 
-				if (_p0->pCollision->mOnOverlappedEx != nullptr) {
+				if (_p0->pCollider->mOnOverlappedEx != nullptr) {
 
 					CollisionEvent e = {
-						_p0->pCollision,
-						_p1->pCollision,
+						_p0->pCollider,
+						_p1->pCollider,
 						CollisionEventType::Stay
 					};
 
-					_p0->pCollision->mOnOverlappedEx(e);
+					_p0->pCollider->mOnOverlappedEx(e);
 				}
 			}
 			
@@ -230,7 +230,7 @@ void CollisionManager::ProcCollisions() {
 			continue;
 		}
 
-		Collision* pColA = p0->pCollision;
+		Collider* pColA = p0->pCollider;
 
 		//有効でなければスキップ
 		if (!pColA->IsActive()) {
@@ -253,7 +253,7 @@ void CollisionManager::ProcCollisions() {
 				continue;
 			}
 
-			Collision* pColB = p1->pCollision;
+			Collider* pColB = p1->pCollider;
 
 			//有効でなければスキップ
 			if (!pColB->IsActive()) {
@@ -305,15 +305,15 @@ void CollisionManager::ProcCollisions() {
 			{
 				p1.second.eventType = CollisionEventType::Exit;
 							
-				if (p0.first->pCollision->mOnOverlappedEx != nullptr) {
+				if (p0.first->pCollider->mOnOverlappedEx != nullptr) {
 
 					CollisionEvent e = {
-						p0.first->pCollision, 
-						p1.first->pCollision,
+						p0.first->pCollider, 
+						p1.first->pCollider,
 						CollisionEventType::Exit
 					};
 
-					p0.first->pCollision->mOnOverlappedEx(e);
+					p0.first->pCollider->mOnOverlappedEx(e);
 				}
 			}
 		}
@@ -322,14 +322,14 @@ void CollisionManager::ProcCollisions() {
 	//ヒット済フラグを下げつつ、一度当たったら非アクティブにするコリジョンを処理する
 	p0 = mUsingTop.pNext;
 	while (p0 != &mUsingTail) {
-		if(!p0->bPendingRemove && p0->pCollision->mIsCollide){
+		if(!p0->bPendingRemove && p0->pCollider->mIsCollide){
 			//一度当たったら非アクティブにする設定で、かつ、
 			//衝突していたら
-			if (p0->pCollision->mActiveDuration == ActiveDuration::Once) {
+			if (p0->pCollider->mActiveDuration == ActiveDuration::Once) {
 				//非アクティブに設定
-				p0->pCollision->SetActive(false);
+				p0->pCollider->SetActive(false);
 			}
-			p0->pCollision->mIsCollide = false;
+			p0->pCollider->mIsCollide = false;
 		}
 		p0 = p0->pNext;
 	}
@@ -340,10 +340,10 @@ void CollisionManager::ProcCollisions() {
 }
 
 
-CollisionManager::Element* CollisionManager::_findElement(Collision* pCollision) {
+CollisionManager::Element* CollisionManager::_findElement(Collider* pCollider) {
 	Element* p = mUsingTop.pNext;
 	while (p != &mUsingTail) {
-		if (p->pCollision == pCollision) {
+		if (p->pCollider == pCollider) {
 			return p;
 		}
 		p = p->pNext;
@@ -370,7 +370,7 @@ void CollisionManager::_procPendingRemoveElements() {
 			}
 		}
 
-		p->pCollision = nullptr;
+		p->pCollider = nullptr;
 		p->bPendingRemove = false;
 
 	};

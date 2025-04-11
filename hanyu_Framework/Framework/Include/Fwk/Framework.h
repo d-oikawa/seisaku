@@ -17,10 +17,6 @@
 #include "Fwk/Time/FPSMeasure.h"
 #include "Fwk/Collision/CollisionManager.h"
 
-#if defined(DEBUG) || defined(_DEBUG)
-#include "Fwk/Debug/DebugLog.h"
-#endif
-
 #pragma comment( lib, "d3d12.lib" )
 #pragma comment( lib, "dxgi.lib" )
 
@@ -40,10 +36,13 @@ using namespace Lib::Math;
 #define Window_I  Framework_I->GetWindow()
 #define Audio_I  Framework_I->GetAudio()
 
-#define PrintText(_t,...)   Fwk::Framework::GetInstance()->_PrintText(_t,__VA_ARGS__)
+#define PrintText(_t,...)   RenderManager_I->PrintText(_t,__VA_ARGS__)
+#define SetTextColor(...)   RenderManager_I->SetTextColor(__VA_ARGS__)
+#define SetTextSize(_s)     RenderManager_I->SetTextSize(_s)
+#define SetClearColor(...)  RenderManager_I->SetClearColor(__VA_ARGS__)
 
 #if defined(DEBUG) || defined(_DEBUG)
-#define DebugLog(_t,...)    Fwk::Framework::GetInstance()->DebugLogImpl(_t,__VA_ARGS__)
+#define DebugLog(_t,...)    RenderManager_I->DebugLogImpl(_t,__VA_ARGS__)
 #else
 #define DebugLog(_t,...)
 #endif
@@ -97,6 +96,7 @@ public:
     void Term();
 
     void Update();
+    void LateUpdate();
     void Render();
     void FrameSync();
 
@@ -115,19 +115,11 @@ public:
     Time* GetTime();
     Window* GetWindow();
     Lib::Audio::Audio* GetAudio();
+    
+public:
 
-    void _PrintText(const wchar_t* pText, float pos_x, float pos_y);
-    void _PrintText(const wchar_t* pText, float pos_x, float pos_y,const float rgb[]);
-    void _PrintText(const wchar_t* pText, float pos_x, float pos_y, const float rgb[], float scale);
-    void _PrintText(const char* pText, float pos_x, float pos_y);
-    void _PrintText(const char* pText, float pos_x, float pos_y, const float rgb[]);
-    void _PrintText(const char* pText, float pos_x, float pos_y, const float rgb[], float scale);
-    void _PrintText(const string& pText, float pos_x, float pos_y);
-    void _PrintText(const string& pText, float pos_x, float pos_y, const float rgb[]);
-    void _PrintText(const string& pText, float pos_x, float pos_y, const float rgb[], float scale);
-
-    void DebugLogImpl(const char* format,...);
-    void DebugLogImpl(const string& format,... );
+    void _DebugLog(const char* format, ...);
+    void _DebugLog(const string& format, ...);
 
 private:
 
@@ -140,17 +132,6 @@ private:
     Fwk::AssetManager m_AssetManager;
     Fwk::RenderManager m_RenderManager;
     Fwk::Collision::CollisionManager m_CollisionManager;
-
-    enum {
-        TEXT_BUFFER_MAX = 128
-    };
-    Font m_Text[TEXT_BUFFER_MAX];
-    int m_UseTextNum;
-
-#if defined(DEBUG) || defined(_DEBUG)
-    Fwk::DebugLog mDebugLog;
-#endif
-
 };
 
 }//namespace Fwk

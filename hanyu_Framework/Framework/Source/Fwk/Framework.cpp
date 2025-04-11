@@ -37,7 +37,6 @@ void Framework::ReleaseInstance() {
 
 
 Framework::Framework()
-	:m_UseTextNum(0)
 {
     ;
 }
@@ -47,7 +46,7 @@ Framework::~Framework()
     Term();
 }
 
-bool Framework::Init(const FrameworkDesc& desc){
+bool Framework::Init(const FrameworkDesc& desc) {
 
 	Debug::Logf("実習用フレームワーク version:%d\n", FWK_VERSION);
 
@@ -66,11 +65,10 @@ bool Framework::Init(const FrameworkDesc& desc){
 
 	//COMの初期化
 	HRESULT result;
-	result = CoInitializeEx(NULL,COINIT_MULTITHREADED);
+	result = CoInitializeEx(NULL, COINIT_MULTITHREADED);
 
 	m_Input.Init();
 	m_Time.Init(desc.DeltaTimeMsMax);
-	m_FPS.Init(desc.TargetFPS, m_Time.GetTime());
 
 	m_AssetManager.Init(
 		desc.AssetRootDir,
@@ -103,16 +101,9 @@ bool Framework::Init(const FrameworkDesc& desc){
 		PixShaderPath
 	);
 
+	m_FPS.Init(desc.TargetFPS, m_Time.GetTime(),&(m_RenderManager.m_SpriteFont));
+
 	m_Audio.Init();
-
-	for (int i = 0; i < TEXT_BUFFER_MAX; ++i) {
-		m_Text[i].Init();
-	}
-	m_UseTextNum = 0;
-
-#if defined(DEBUG) || defined(_DEBUG)
-	mDebugLog.Init();
-#endif
 
 	//コリジョンマネージャの初期化
 	m_CollisionManager.Init(desc.CollisionBufferSize);
@@ -130,20 +121,13 @@ void Framework::Term()
 
 	m_CollisionManager.Term();
 
-#if defined(DEBUG) || defined(_DEBUG)
-	mDebugLog.Term();
-#endif
-
-	for (int i = 0; i < TEXT_BUFFER_MAX; ++i) {
-		m_Text[i].Term();
-	}
-
 	m_Time.Term();
 	m_Input.Term();
 
 	m_Audio.Term();
 	m_RenderManager.Term();
 	m_AssetManager.Term();
+	m_FPS.Term();
 
 	CoUninitialize();
 
@@ -152,26 +136,21 @@ void Framework::Term()
 
 void Framework::Update()
 {
-	m_UseTextNum = 0;
-
+	m_RenderManager.Update(m_Time.GetDeltaTime());
 	m_Time.Update();
 	m_FPS.Update(m_Time.GetTime());
 	m_Input.Update();
+}
 
-#if defined(DEBUG) || defined(_DEBUG)
-	mDebugLog.Update(m_Time.GetDeltaTime());
-#endif
+void Framework::LateUpdate() {
+
+	//更新処理が終わった後にコリジョンを処理する
+	m_CollisionManager.ProcCollisions();
+
 }
 
 void Framework::Render()
 {
-	for (int i = 0; i < m_UseTextNum; ++i) {
-		m_Text[i].Draw();
-	}
-#if defined(DEBUG) || defined(_DEBUG)
-	mDebugLog.Draw();
-#endif
-
 	m_FPS.Draw();
 	m_RenderManager.Render();
 }
@@ -194,7 +173,7 @@ void Framework::HideFPS() {
 }
 
 void Framework::SetFPSPosition(float x, float y) {
-	m_FPS.SetDrawPosition(x,y);
+	m_FPS.SetDrawPosition(x, y);
 }
 
 //ウィンドウの中心点を原点とした時のカーソル位置を戻す
@@ -202,7 +181,6 @@ void Framework::SetFPSPosition(float x, float y) {
 Vector2f Framework::GetMousePointInClient()const {
 	return m_Window.TransformToClient(m_Input.GetMousePoint());
 }
-
 
 RenderManager* Framework::GetRenderManager() {
 	return &m_RenderManager;
@@ -229,78 +207,6 @@ Lib::Audio::Audio* Framework::GetAudio() {
 
 AssetManager* Framework::GetAssetManager() {
 	return &m_AssetManager;
-}
-
-void Framework::_PrintText(const wchar_t* pText, float pos_x, float pos_y)
-{
-	const float color[3] = { 1.0f,1.0f,1.0f };
-	_PrintText(pText, pos_x, pos_y, color, 1.0f);
-}
-void Framework::_PrintText(const wchar_t* pText, float pos_x, float pos_y, const float rgb[])
-{
-	_PrintText(pText, pos_x, pos_y, rgb, 1.0f);
-}
-
-void Framework::_PrintText(const wchar_t* pText, float pos_x, float pos_y, const float rgb[], float scale)
-{
-	if (m_UseTextNum >= TEXT_BUFFER_MAX)
-		return;
-
-	m_Text[m_UseTextNum].SetText(pText);
-	m_Text[m_UseTextNum].SetPosition(pos_x, pos_y);
-	m_Text[m_UseTextNum].SetColor(rgb[0], rgb[1], rgb[2]);
-	m_Text[m_UseTextNum].SetScale(scale, scale);
-
-	++m_UseTextNum;
-}
-
-void Framework::_PrintText(const char* pText, float pos_x, float pos_y)
-{
-	const float color[3] = { 1.0f,1.0f,1.0f };
-	_PrintText(pText, pos_x, pos_y, color, 1.0f);
-}
-void Framework::_PrintText(const char* pText, float pos_x, float pos_y, const float rgb[])
-{
-	_PrintText(pText, pos_x, pos_y, rgb, 1.0f);
-}
-void Framework::_PrintText(const char* pText, float pos_x, float pos_y, const float rgb[], float scale)
-{
-	if (m_UseTextNum >= TEXT_BUFFER_MAX)
-		return;
-
-	m_Text[m_UseTextNum].SetText(pText);
-	m_Text[m_UseTextNum].SetPosition(pos_x, pos_y);
-	m_Text[m_UseTextNum].SetColor(rgb[0], rgb[1], rgb[2]);
-	m_Text[m_UseTextNum].SetScale(scale, scale);
-
-	++m_UseTextNum;
-}
-
-void Framework::_PrintText(const string& pText, float pos_x, float pos_y) {
-	_PrintText(pText.c_str(), pos_x, pos_y);
-}
-void Framework::_PrintText(const string& pText, float pos_x, float pos_y, const float rgb[]) {
-	_PrintText(pText.c_str(), pos_x, pos_y,rgb);
-}
-void Framework::_PrintText(const string& pText, float pos_x, float pos_y, const float rgb[], float scale) {
-	_PrintText(pText.c_str(), pos_x, pos_y, rgb,scale);
-}
-
-void Framework::DebugLogImpl(const char* format, ...)
-{
-#if defined(DEBUG) || defined(_DEBUG)
-	va_list args;
-	va_start(args, format);
-	mDebugLog.Print(format,args);
-	va_end(args);   // (9)
-#endif
-}
-
-void Framework::DebugLogImpl(const string& format, ...) {
-#if defined(DEBUG) || defined(_DEBUG)
-	mDebugLog.Print(format.c_str());
-#endif
-
 }
 
 }//namespace Fwk

@@ -42,7 +42,7 @@ void Notes::Update() {
 		return;
 	}
 	mSprite.SetVisible(true);
-	float speed = 838.0f * Time_I->GetDeltaTime();
+	float speed = 1200.0f * Time_I->GetDeltaTime();
 	mPosition.x -= speed;
 	if (mPosition.x < 0.0f)
 	{

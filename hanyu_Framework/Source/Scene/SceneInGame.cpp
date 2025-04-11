@@ -44,6 +44,6 @@ void SceneInGame::Render() {
 	GameObjectRender();
 }
 
-float SceneInGame::GetTimer() {
-	return mTimer;
+float SceneInGame::GetBeat() {
+	return mBeat;
 }

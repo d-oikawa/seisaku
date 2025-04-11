@@ -19,7 +19,10 @@ public:
 
 	void Play(int PlayNum = 1);
 	void Stop();
+	void Pause();
+	
 	bool IsPlaying()const;
+	bool IsPausing()const;
 
 private:
 
@@ -49,6 +52,7 @@ private:
 	const WaveData* mp_waveData;
 
 	bool m_isPlaying;
+	bool m_isPausing;
 
 	std::mutex m_mutex;
 

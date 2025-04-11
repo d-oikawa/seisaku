@@ -26,7 +26,7 @@ Font::~Font()
 	Term();
 }
 
-void Font::Init()
+void Font::Init(Fwk::SpriteFont* pSpriteFont)
 {
 	m_Text.clear();
 	m_Position = XMFLOAT2( 0.0f,0.0f );
@@ -37,7 +37,7 @@ void Font::Init()
 	m_Depth = 0.5f;
 	SetPriority(0);
 
-	RenderManager_I->SetupFont(this);
+	m_pSpriteFont = pSpriteFont;
 }
 
 void Font::Term()
@@ -163,8 +163,4 @@ RENDER_PASS Font::GetRenderPass()const
 RENDER_MODE Font::GetRenderMode()const
 {
 	return RENDER_MODE::Sprite_Transparent;
-}
-void Font::SetSpriteFont(Fwk::SpriteFont* pSpriteFont)
-{
-	m_pSpriteFont = pSpriteFont;
 }

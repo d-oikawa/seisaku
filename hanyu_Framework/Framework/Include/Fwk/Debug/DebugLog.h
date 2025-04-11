@@ -6,6 +6,7 @@
 
 namespace Fwk
 {
+class SpriteFont;
 
 class DebugLog
 {
@@ -15,7 +16,7 @@ public:
 	DebugLog();
 	~DebugLog();
 
-	void Init();
+	void Init(Fwk::SpriteFont* pSpriteFont);
 	void Term();
 	void Update(float deltaTime);
 	void Draw();

@@ -20,19 +20,23 @@ FPSMeasure::~FPSMeasure()
 	;
 }
 
-void FPSMeasure::Init(uint32_t targetFPS,DWORD currentTime)
+void FPSMeasure::Init(uint32_t targetFPS,DWORD currentTime, Fwk::SpriteFont* pSpriteFont)
 {
 	//FPS計算周りの変数
 	m_FrameCount = 0;
 	m_StartTime = currentTime;
 	m_TargetFPS = targetFPS;
 
-	m_Font.Init();
+	m_Font.Init(pSpriteFont);
 	m_Font.SetScale(1.0f, 1.0f);
 	m_Font.SetDepth(0.0f);
 	m_Font.SetPosition(0.0f,0.0f);
 	m_Font.SetColor(1.0f, 1.0f, 1.0f);
 	m_Font.SetVisible(false);
+}
+
+void FPSMeasure::Term() {
+	m_Font.Term();
 }
 
 void FPSMeasure::Update(DWORD currentTime)
@@ -47,10 +51,13 @@ void FPSMeasure::Update(DWORD currentTime)
 		AveFps = (elapsedTime > 0) ? 1000.f / ((float)elapsedTime / (float)m_AveCalcCount) : 0.0f;
 		m_StartTime = currentTime;
 
-		wchar_t buffer[256] = { 0 };
-		swprintf_s(buffer, 256, L"fps=%.1f delta=%.1f", AveFps, ((float)elapsedTime / (float)m_AveCalcCount));
-		std::wstring text = buffer;
-		m_Font.SetText(text);
+		if(m_Font.IsVisible())
+		{
+			wchar_t buffer[256] = { 0 };
+			swprintf_s(buffer, 256, L"fps=%.1f delta=%.1f", AveFps, ((float)elapsedTime / (float)m_AveCalcCount));
+			std::wstring text = buffer;
+			m_Font.SetText(text);
+		}
 	}
 
 	++m_FrameCount;

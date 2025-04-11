@@ -23,7 +23,7 @@ public:
     Font();
     ~Font();
 
-    void Init();
+    void Init(Fwk::SpriteFont* pSpriteFont);
     void Term();
     void Clear();
 

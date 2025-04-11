@@ -3,7 +3,7 @@
 namespace Fwk {
 namespace Collision {
 
-class Collision;
+class Collider;
 
 //活性の期間
 enum ActiveDuration {
@@ -22,8 +22,8 @@ enum class CollisionEventType {
 
 //衝突イベントの情報
 struct CollisionEvent {
-	Collision* CollisionA;
-	Collision* CollisionB;
+	Collider* ColliderA;
+	Collider* ColliderB;
 	CollisionEventType EventType;
 };
 
