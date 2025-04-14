@@ -25,6 +25,8 @@ public:
 	float GetBeat();
 	void SetBeat(int beat);
 	virtual void OnCreated();
+	int GetNotesLine();
+	void SetNotesLine(int notesline);
 
 
 protected:
@@ -34,6 +36,7 @@ protected:
 	float mBeat;
 	bool mIsActive;
 	bool mIsOnCreated;
+	int mNotesLine;
 	Texture mTexture;
 	Sprite mSprite;
 	Vector2f mPosition;

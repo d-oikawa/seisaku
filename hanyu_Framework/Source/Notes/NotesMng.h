@@ -37,8 +37,8 @@ public:
 	//すべてのノーツのオブジェクトプールの開放
 	void DestroyPoolALL();
 
-	//ノーツの生成
-	void CreateNotes(string notesName);
+	//ノーツの生成 
+	void CreateNotes(string notesName,int notesline);
 
 	//残りのノーツの数
 	int GetNotesCount();

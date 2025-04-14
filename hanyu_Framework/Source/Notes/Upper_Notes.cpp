@@ -18,6 +18,11 @@ void Upper_Notes::Init() {
 }
 
 //更新
+//生成のラインが同じでは無ければ更新しない
 void Upper_Notes::Update() {
+	if (Notes::GetNotesLine())
+	{
+		return;
+	}
 	Notes::Update();
 }

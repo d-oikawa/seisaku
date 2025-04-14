@@ -63,18 +63,26 @@ void NotesMng::Update() {
 	//現在のBeatを取得
 	mBeat = GetBeats()->GetBeatsCounts();
 
-	//現在のBeatが生成するビートの＋５拍と同じ値であれば生成し、ループを抜ける
+	//現在のBeatが生成するビートの＋５拍と同じ値であれば生成し、ループを抜ける 
+	//なんかこのbreakだと2重ループを抜けないため、条件式を追加。いつか修正予定なはず。多分
 	for (int i = 0; i < mRowNum; i++)
 	{
+		int b = 0;
 		//拍数分繰り返し
 		//iが0なら上ノーツ、1なら下ノーツの生成
 		for (int n = 0; n < mBeatNum; n++)
 		{
-			if (mpBeatMapData[i][n + (mBeat)] == 1 && n == mBeat)
+			if (mpBeatMapData[i][mBeat])
 			{
-				CreateNotes(mNotesName[i]);
+				CreateNotes(mNotesName[i],i);
+				b = 1;
 				break;
 			}
+		}
+
+		if (b)
+		{
+			break;
 		}
 	}
 }
@@ -125,7 +133,7 @@ void NotesMng::DestroyPoolALL() {
 }
 
 //ノーツの生成
-void NotesMng::CreateNotes(string notesName) {
+void NotesMng::CreateNotes(string notesName,int notesline) {
 	//指定のノーツプールから非アクティブのオブジェクトを取得する
 	Notes* pNotes = nullptr;
 
@@ -142,6 +150,9 @@ void NotesMng::CreateNotes(string notesName) {
 	}
 	//生成タイミングの時間を設定
 	pNotes->SetBeat(mBeat);
+
+	//生成するノーツの列を設定
+	pNotes->SetNotesLine(notesline);
 
 	//生成時に関数を呼び出す
 	pNotes->OnCreated();

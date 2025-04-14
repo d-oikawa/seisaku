@@ -115,3 +115,14 @@ float Notes::GetBeat() {
 void Notes::OnCreated() {
 	mPosition.x = WINDOW_WIDTH + 64.0f;
 }
+
+//生成する時のノーツのラインを取得
+int Notes::GetNotesLine() {
+	return mNotesLine;
+}
+
+//生成する時のノーツのラインを設定
+void Notes::SetNotesLine(int notesline)
+{
+	mNotesLine = notesline;
+}

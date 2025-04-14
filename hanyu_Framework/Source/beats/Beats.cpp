@@ -7,12 +7,14 @@
 //1小節の拍数×小節数＝総拍数
 //総拍数×BPM分の60＝演奏時間
 //演奏時間÷総拍数＝1拍当たりの秒数4拍子
+//ノーツラインを現在のBeatのタイミングで置きたいため、初期で＋4拍する
 
 void Beats::Init() {
 		mSound.Load(musicFileName);
 		mSoundSource.Init(mSound);
 		mSoundSource.Play();
 		mBeats = mSongLength / (float)(8 * 24);
+		mBeatsCounts += 4;
 }
 
 //更新
