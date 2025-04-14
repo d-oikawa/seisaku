@@ -64,15 +64,15 @@ void NotesMng::Update() {
 	mBeat = GetBeats()->GetBeatsCounts();
 
 	//現在のBeatが生成するビートの＋５拍と同じ値であれば生成し、ループを抜ける 
-	//なんかこのbreakだと2重ループを抜けないため、条件式を追加。いつか修正予定なはず。多分
 	for (int i = 0; i < mRowNum; i++)
 	{
 		int b = 0;
 		//拍数分繰り返し
 		//iが0なら上ノーツ、1なら下ノーツの生成
+		//ノーツが判定ラインに行く4拍前に生成するため+4にする
 		for (int n = 0; n < mBeatNum; n++)
 		{
-			if (mpBeatMapData[i][mBeat])
+			if (mpBeatMapData[i][mBeat+4])
 			{
 				CreateNotes(mNotesName[i],i);
 				b = 1;
