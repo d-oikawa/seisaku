@@ -28,6 +28,9 @@
     <Filter Include="ソース ファイル\beats">
       <UniqueIdentifier>{0c2ab324-4fc8-46f4-b2fd-653975fd0b18}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Mst">
+      <UniqueIdentifier>{00bf9b51-2628-4199-8b4b-8c31988a730f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\App.cpp">
@@ -83,6 +86,15 @@
     </ClCompile>
     <ClCompile Include="Source\beats\Beats.cpp">
       <Filter>ソース ファイル\beats</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Mst\PauseMst.cpp">
+      <Filter>ソース ファイル\Mst</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Scene\Pause.cpp">
+      <Filter>ソース ファイル\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\circle\circleMng.cpp">
+      <Filter>ソース ファイル\circle</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -142,6 +154,15 @@
     </ClInclude>
     <ClInclude Include="Source\beats\Beats.h">
       <Filter>ソース ファイル\beats</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Mst\PauseMst.h">
+      <Filter>ソース ファイル\Mst</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Scene\Pause.h">
+      <Filter>ソース ファイル\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\circle\circleMng.h">
+      <Filter>ソース ファイル\circle</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
