@@ -46,6 +46,9 @@ public:
 	//CSVデータからノーツを生成する
 	void CreateNotes(int beatNum, int rowNum, CSVData* pCsvData);
 
+	//ノーツの生成フラグを取得
+	bool IsCreateNotes() { return mIsCreateNotes; }
+
 private:
 	//アクティブなノーツオブジェクトのポインタ配列
 	vector<Notes*> mActiveNotes;
@@ -64,5 +67,8 @@ private:
 
 	//譜面のデータ(id)を収める配列のアドレスの作成
 	int** mpBeatMapData;
+
+	//ノーツが生成されているか
+	bool mIsCreateNotes;
 };
 

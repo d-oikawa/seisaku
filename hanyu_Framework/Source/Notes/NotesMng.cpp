@@ -54,33 +54,39 @@ void NotesMng::Update() {
 			mActiveNotes.erase(mActiveNotes.begin() + i);
 		}
 	}
-	//現在のBeatと更新されているBeatの値が同じであればreturn
-	if (mBeat==GetBeats()->GetBeatsCounts())
+
+	//現在のBeatと更新されているBeatの値が同じかつこのビートで生成してあればreturn
+	//出なければ生成フラグをおろす
+	if (mBeat==GetBeats()->GetBeatsCounts()&&mIsCreateNotes)
 	{
 		return;
 	}
+	else
+	{
+		mIsCreateNotes = false;
+	}
+
 
 	//現在のBeatを取得
 	mBeat = GetBeats()->GetBeatsCounts();
 
-	//現在のBeatが生成するビートの＋５拍と同じ値であれば生成し、ループを抜ける 
+	//現在のBeatが生成するビートが同じ値であれば生成し、ループを抜ける 
 	for (int i = 0; i < mRowNum; i++)
 	{
-		int b = 0;
 		//拍数分繰り返し
 		//iが0なら上ノーツ、1なら下ノーツの生成
 		//ノーツが判定ラインに行く4拍前に生成するため+4にする
 		for (int n = 0; n < mBeatNum; n++)
 		{
-			if (mpBeatMapData[i][mBeat+4])
+			if (mpBeatMapData[i][mBeat])
 			{
 				CreateNotes(mNotesName[i],i);
-				b = 1;
+				mIsCreateNotes = true;
 				break;
 			}
 		}
 
-		if (b)
+		if (mIsCreateNotes)
 		{
 			break;
 		}

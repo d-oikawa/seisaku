@@ -22,3 +22,6 @@ void GameObjectTerm();
 
 //Beatsクラスのポインタを返す
 Beats* GetBeats();
+
+//NotesMngクラスのポインタを返す
+NotesMng* GetNotesMng();

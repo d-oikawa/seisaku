@@ -78,3 +78,9 @@ Beats* GetBeats()
 {
 	return &mBeats;
 }
+
+//NotesMngクラスのポインタを返す
+NotesMng* GetNotesMng()
+{
+	return &mNotesMng;
+}

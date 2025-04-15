@@ -1,5 +1,6 @@
 #include "Beats.h"
 #include <Fwk/Framework.h>
+#include "GameObjectMng/GameObjectMng.h"
 
 //初期化
 //音楽・タイマーの初期化
@@ -11,12 +12,12 @@
 void Beats::Init() {
 		mSound.Load(musicFileName);
 		mSoundSource.Init(mSound);
-		mSoundSource.Play();
-		mBeats = mSongLength / (float)(8 * 24);
+		mBeats = mSongLength / (32.0f * 24.0f);
 }
 
 //更新
 //タイマー・拍の更新
+//最初のノーツが生成されたタイミングで音楽をスタートする
 void Beats::Update() {
 	mTimer += Time_I->GetDeltaTime();
 	mBeatTimer += Time_I->GetDeltaTime();
@@ -24,6 +25,10 @@ void Beats::Update() {
 	{
 		mBeatsCounts++;
 		mBeatTimer = 0.0f;
+	}
+	if (GetNotesMng()->IsCreateNotes()&&!mSoundSource.IsPlaying())
+	{
+		mSoundSource.Play();
 	}
 }
 
